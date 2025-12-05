@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 public class Etablissement {
     private final static int MAX_ARTICLE = 20;
-    private final static int MAX_BON = 50;
+    private final static int MAX_BON = 10;
 //    public final static String FICHIER_ARTICLE = "article.txt";
     public final static String FICHIER_BON = "bon.txt";
     
@@ -301,6 +301,16 @@ public class Etablissement {
         fich.close();
     }
     
+        public void versFichierDepots(String fichier) throws IOException{
+        FileWriter fich=new FileWriter(fichier);
+        for(int i=0; i<this.nbBon; i++){
+            String ch = this.bons[i].versFichier();
+            fich.write(ch);
+        }
+        System.out.println("Fichier : "+fichier+" créer avec succès");
+        fich.close();
+    }
+    
     public void depuisFichierDepots() throws IOException, FileNotFoundException{
         FileReader fich = new FileReader(FICHIER_BON);
         BufferedReader br = new BufferedReader(fich);
@@ -328,7 +338,7 @@ public class Etablissement {
             this.ajouterBon(nouveauBon);
             ligne = br.readLine();
         }
-        
+        fich.close();
     }
     
         public void depuisFichierDepots(String fichier) throws IOException, FileNotFoundException{
@@ -358,7 +368,7 @@ public class Etablissement {
             this.ajouterBon(nouveauBon);
             ligne = br.readLine();
         }
-        
+        fich.close();
     }
     
 }

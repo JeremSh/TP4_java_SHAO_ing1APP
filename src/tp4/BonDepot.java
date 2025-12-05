@@ -96,7 +96,11 @@ public class BonDepot {
     public int getID() {
         return ID;
     }
-
+    
+    public int getMaxLigne(){
+        return this.MAX_LIGNE_DEPOT;
+    }
+    
     public String getNumTel() {
         return numTel;
     }

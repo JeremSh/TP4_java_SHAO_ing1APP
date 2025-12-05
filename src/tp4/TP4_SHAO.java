@@ -6,6 +6,9 @@ package tp4;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
@@ -13,6 +16,60 @@ import java.time.LocalDate;
  */
 public class TP4_SHAO {
 
+     public static String genererNumeroTel() {
+         Random rand = new Random();
+        // Choisir entre 06 et 07
+        String numero = rand.nextBoolean() ? "06" : "07";
+        // Ajouter les 8 chiffres restants
+        for (int i = 0; i < 8; i++) {
+            if(i%2==0){
+                numero+=" ";
+            }
+            numero += rand.nextInt(10);
+        }
+        return numero;
+    }
+    
+     
+    public static LocalDate genererLocalDateAleatoire() {
+        Random rand = new Random();
+
+        int annee = rand.nextInt(2100 - 1900 + 1) + 1900;
+        int mois  = rand.nextInt(12) + 1;                
+
+        // nbMaxJours dépend du mois et de l'année (pour gérer février / année bissextile)
+        int nbMaxJours = LocalDate.of(annee, mois, 1).lengthOfMonth();
+        int jour = rand.nextInt(nbMaxJours) + 1;
+
+        return LocalDate.of(annee, mois, jour);
+    }
+    
+    public static String genererID() {
+        Random rand = new Random();
+        // Choisir aléatoirement entre 8 et 13 chiffres
+        int longueur = rand.nextBoolean() ? 13 : 8;
+        String id = "";
+        for (int i = 0; i < longueur; i++) {
+            id += rand.nextInt(10);
+        }
+        return id;
+    }
+    
+    public static int genererQuantite() {
+        Random rand = new Random();
+        return rand.nextInt(10000) + 1;
+    }
+    
+    public static BonDepot genererBon(){
+        BonDepot nbon = new BonDepot(genererNumeroTel(), genererLocalDateAleatoire());
+        Random rand = new Random();
+        int nbLigne = rand.nextInt(nbon.getMaxLigne()) + 1;
+        for(int cpt=0; cpt < nbLigne; cpt++){
+            nbon.ajouterLigne(genererID(), rand.nextInt(10000) + 1);
+        }
+        return nbon;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -74,8 +131,7 @@ public class TP4_SHAO {
         System.out.println("Test Pour la génération ou la sauvegarde dans un fichier");
         System.out.println("-------------------------------------------------------------------------------------------------------");
         
-        e1.versFichierDepots();
-        e1.depuisFichierDepots();
+        e1.versFichierDepots("testBonMag1.txt");
         e1.afficheEtablissement();
         
         System.out.println("-------------------------------------------------------------------------------------------------------");
@@ -86,7 +142,58 @@ public class TP4_SHAO {
         e2.afficheEtablissement();
         e2.depuisFichierDepots("bonTest.txt");
         e2.afficheEtablissement();
+
+        System.out.println("-------------------------------------------------------------------------------------------------------");
+        System.out.println("Test Finale Menu");
+        System.out.println("-------------------------------------------------------------------------------------------------------");
         
+        boolean fin = false;
+        Etablissement eMenu = new Etablissement("Magasin menu");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Bienvenue dans le menu du Magasin "+eMenu.getNom());
+        while(!fin){    
+            System.out.println("Faite le choix de votre action en saisisant le chiffre correspondant");
+            System.out.println("1. Afficher les information de l'enseigne");
+            System.out.println("2. Ajouter un Bon de test aléatoirement générer");
+            System.out.println("3. sauvegarder dans un fichier les données");
+            System.out.println("4. chargé les données d'un fichier");
+            System.out.println("5. quitter");
+            
+            int choix = scanner.nextInt(); 
+            
+            switch (choix) {
+                case 1:
+                    System.out.println("Voici les informations de l'établissement");
+                    eMenu.afficheEtablissement();
+                    break;
+
+                case 2:
+                    BonDepot b = genererBon();
+                    System.out.println("Le bon qui été générer et ajouter est le suivant :");
+                    b.affiche();
+                    eMenu.ajouterBon(b);
+                    break;
+
+                case 3:
+                    eMenu.versFichierDepots();
+                    break;
+                    
+                case 4:
+                    eMenu.depuisFichierDepots();
+                    break;
+                    
+                case 5:
+                    fin = true;
+                    break;
+
+                default:
+                    System.out.println("Choix invalide");
+                    break;
+            }
+            
+        } 
+        System.out.println("Au revoir");
+        scanner.close(); // optionnel mais conseillé
     }
-    
+
 }
