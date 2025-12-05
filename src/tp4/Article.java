@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package tp3;
+package tp4;
 
 import java.time.Month;
 import java.time.LocalDate;
@@ -23,6 +23,7 @@ abstract class Article {
     }
     
     public abstract String getNumero();
+    public abstract int getNbExemplaire();
     public abstract boolean placerApres(Article autreArticle); 
     public abstract void ajouter(int quantite);
     public abstract void retirer(int quantite);

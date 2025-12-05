@@ -2,10 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package tp3;
+package tp4;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  *
@@ -14,6 +19,9 @@ import java.util.ArrayList;
 public class Etablissement {
     private final static int MAX_ARTICLE = 20;
     private final static int MAX_BON = 50;
+//    public final static String FICHIER_ARTICLE = "article.txt";
+    public final static String FICHIER_BON = "bon.txt";
+    
     private String nom;
     // on peut utiliser des List comme des arraylist par exemple, mais on devrais gérer nous même la limite
     // j'ai choisie des tableaux car c'est ce qui était demandé
@@ -233,6 +241,124 @@ public class Etablissement {
         else {
             System.out.println("❌ Plus de place, tableau plein !");
         }
+    }
+    
+    public void ajouterBon(BonDepot nouveau){
+        if(nbBon < MAX_BON){
+            int pos = 0;
+            while (pos < nbBon && bons[pos].getDateDepot().isBefore(nouveau.getDateDepot())) {
+                pos++;
+            }
+            
+            for (int i = nbBon; i > pos; i--) {
+                bons[i] = bons[i - 1];
+            }
+            
+            bons[pos] = nouveau;
+            nbBon++;
+
+            System.out.println("Le nouveau bon a bien était enregistré");
+        }
+        else {
+            System.out.println("❌ Plus de place, tableau plein !");
+        }
+    }    
+   
+    public void listerArticle(){
+        Article[] newTab = new Article[this.articles.length];
+        newTab[0] = articles[0];
+        // création d'un nouveau tableau trier par ordre croissant par nombre d'exemplaire
+        for (int i = 1; i < this.articles.length; i++) {
+            if(this.articles[i] != null){
+                Article articleCourant = this.articles[i];
+                int j = i - 1;
+
+                // on reste dans la partie déjà remplie : j >= 0
+                while (j >= 0 && newTab[j].getNbExemplaire() > articleCourant.getNbExemplaire()) {
+                    newTab[j + 1] = newTab[j];
+                    j--;
+                }
+                newTab[j + 1] = articleCourant;
+            }
+        }
+        
+        //affichage du nouveau tableau trié
+        for(Article article : newTab){
+            if(article != null){
+                System.out.println(article.toString());
+            }
+        }
+    }
+    
+    
+    public void versFichierDepots() throws IOException{
+        FileWriter fich=new FileWriter(FICHIER_BON);
+        for(int i=0; i<this.nbBon; i++){
+            String ch = this.bons[i].versFichier();
+            fich.write(ch);
+        }
+        System.out.println("Fichier : "+FICHIER_BON+" créer avec succès");
+        fich.close();
+    }
+    
+    public void depuisFichierDepots() throws IOException, FileNotFoundException{
+        FileReader fich = new FileReader(FICHIER_BON);
+        BufferedReader br = new BufferedReader(fich);
+        int nbBonLue = 0;
+        
+        System.out.println("contenu chargé du fichier : "+FICHIER_BON);
+        
+        String ligne = br.readLine();
+        while(ligne != null){
+            int id = Integer.parseInt(ligne);
+            ligne = br.readLine();
+            String[]tab = ligne.split(" : ");
+            String numTel = tab[0];
+            LocalDate date = LocalDate.parse(tab[1]);
+            BonDepot nouveauBon = new BonDepot(id, numTel, date);
+            int nbLigne = Integer.parseInt(tab[2]);
+            System.out.println(nbLigne);
+            for(int cpt = 0; cpt < nbLigne; cpt++){
+                ligne = br.readLine();
+                tab = ligne.split(" : ");
+                int nbExemplaire = Integer.parseInt(tab[0]);
+                String idLigne = tab[1];
+                nouveauBon.ajouterLigne(idLigne, nbExemplaire);
+            }
+            this.ajouterBon(nouveauBon);
+            ligne = br.readLine();
+        }
+        
+    }
+    
+        public void depuisFichierDepots(String fichier) throws IOException, FileNotFoundException{
+        FileReader fich = new FileReader(fichier);
+        BufferedReader br = new BufferedReader(fich);
+        int nbBonLue = 0;
+        
+        System.out.println("contenu chargé du fichier : "+fichier);
+        
+        String ligne = br.readLine();
+        while(ligne != null){
+            int id = Integer.parseInt(ligne);
+            ligne = br.readLine();
+            String[]tab = ligne.split(" : ");
+            String numTel = tab[0];
+            LocalDate date = LocalDate.parse(tab[1]);
+            BonDepot nouveauBon = new BonDepot(id, numTel, date);
+            int nbLigne = Integer.parseInt(tab[2]);
+            System.out.println(nbLigne);
+            for(int cpt = 0; cpt < nbLigne; cpt++){
+                ligne = br.readLine();
+                tab = ligne.split(" : ");
+                int nbExemplaire = Integer.parseInt(tab[0]);
+                String idLigne = tab[1];
+                nouveauBon.ajouterLigne(idLigne, nbExemplaire);
+            }
+            this.ajouterBon(nouveauBon);
+            ligne = br.readLine();
+        }
+        
     }
     
 }

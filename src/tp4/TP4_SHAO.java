@@ -2,20 +2,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package tp3;
+package tp4;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 /**
  *
  * @author jerem
  */
-public class TP3 {
+public class TP4_SHAO {
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Livre l1 = new Livre("1234561234561", 20, "livre de test", 10.0, 2);
         Manuel m1 = new Manuel("Histoire", "Cp", "1234561234562", 20, "manuel de test", 15.0, 5);
         Magazine mag1 = new Magazine("12345678", "mensuel", LocalDate.now(), "Magazine test", 8.0, 4);
@@ -55,6 +56,37 @@ public class TP3 {
         e1.getBons()[0].ajouterLigne("1452637898451", 30);
         
         e1.afficheEtablissement();
+        
+        e1.listerArticle();
+        
+        bon1.ajouterLigne("1452637898451", 20);
+        bon1.ajouterLigne("1452634298452", 40);
+        bon1.ajouterLigne("1452637898453", 100);
+        bon1.ajouterLigne("1452637898454", 220);
+        
+        System.out.println(bon1.versFichier());
+        
+        e1.ajouterBon(bon1);
+        
+        e1.afficheEtablissement();
+        
+        System.out.println("-------------------------------------------------------------------------------------------------------");
+        System.out.println("Test Pour la génération ou la sauvegarde dans un fichier");
+        System.out.println("-------------------------------------------------------------------------------------------------------");
+        
+        e1.versFichierDepots();
+        e1.depuisFichierDepots();
+        e1.afficheEtablissement();
+        
+        System.out.println("-------------------------------------------------------------------------------------------------------");
+        System.out.println("Test Pour la lecture à partir d'un fichier");
+        System.out.println("-------------------------------------------------------------------------------------------------------");
+        
+        Etablissement e2 = new Etablissement("Magasin d'encore l'autre monde");
+        e2.afficheEtablissement();
+        e2.depuisFichierDepots("bonTest.txt");
+        e2.afficheEtablissement();
+        
     }
     
 }

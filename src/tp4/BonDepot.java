@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package tp3;
+package tp4;
 
 import java.time.LocalDate;
 
@@ -36,6 +36,20 @@ public class BonDepot {
         dateDepot = date;
         ID = CountID;
         CountID++;
+    }
+    
+    BonDepot(int id, String num, LocalDate date){
+        if(id >= CountID){
+            this.ID = id;
+            CountID = ID+1;
+        }
+        else{
+            System.out.println("L'id transmis étant soit déjà distribuer, soit incompatible, un nouvel ID sera attribuer automatiquement.");
+            this.ID = this.CountID;
+            CountID ++;
+        }
+        this.numTel = num;
+        this.dateDepot = date;
     }
     
     // constructur si jamais le numéro de telephone est donner comme int
@@ -124,5 +138,16 @@ public class BonDepot {
         else {
             System.out.println("❌ l'identifiant "+id+" saisie n'est pas valide !");
         }
+    }
+    
+    public String versFichier(){
+        String retour = ""+this.ID+System.lineSeparator();
+        retour = retour+this.numTel+" : "+this.dateDepot+" : "+this.nbArticleDepot+System.lineSeparator();
+        for(LigneDepot ligne : this.LignesDep){
+            if(ligne != null){
+                retour = retour+ligne.versFichier()+System.lineSeparator();
+            }
+        }
+        return retour;
     }
 }
