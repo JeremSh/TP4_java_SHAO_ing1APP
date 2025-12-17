@@ -193,7 +193,7 @@ public class TP4_SHAO {
             
         } 
         System.out.println("Au revoir");
-        scanner.close(); // optionnel mais conseillé
+        scanner.close();
     }
 
 }
